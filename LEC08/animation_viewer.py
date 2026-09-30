@@ -72,3 +72,19 @@ def validate_atlas(data):
                     and f['x'] + f['w'] <= data['width']
                     and f['y'] + f['h'] <= data['height']):
                 raise ValueError('Frame rectangle lies outside atlas')
+
+
+def calculate_scale(data):
+    """가장 작은 자세도 화면 높이 절반 이상, 큰 자세도 화면 안에."""
+    frames = [f for a in data['animations'] for f in a['frames']]
+    minimum = min(f['h'] for f in frames)
+    scale = max(1, int(CANVAS_HEIGHT * 0.62 / minimum + 0.999))
+    return scale
+
+
+def frame_geometry(frame, scale):
+    # atlas는 좌상단 좌표, Pico2D 화면은 좌하단 좌표를 사용한다.
+    # 원본의 (32, 32) 피벗을 유지하여 trim 크기가 달라도 흔들리지 않는다.
+    x = CANVAS_WIDTH / 2 + (frame['w'] / 2 - frame['pivot_x']) * scale
+    y = CANVAS_HEIGHT / 2 + (5 + frame['pivot_y'] - frame['h'] / 2) * scale
+    return x, y, frame['w'] * scale, frame['h'] * scale
