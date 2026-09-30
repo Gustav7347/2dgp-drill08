@@ -23,6 +23,7 @@ class AnimationPlayer:
         self.frame_index = 0
         self.elapsed = 0.0
         self.completed_loops = 0
+        self.paused = False
 
     @property
     def animation(self):
