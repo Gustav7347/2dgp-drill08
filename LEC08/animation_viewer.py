@@ -124,6 +124,8 @@ def main():
     validate_atlas(data)
     player = AnimationPlayer(data['animations'])
     scale = calculate_scale(data)
+    from sdl2 import SDL_SetHint
+    SDL_SetHint(b'SDL_RENDER_SCALE_QUALITY', b'0')
     p2d.open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
     try:
         image = p2d.load_image(str(BASE_DIR / 'assets' / data['image']))
