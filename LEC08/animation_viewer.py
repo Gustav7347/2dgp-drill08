@@ -94,3 +94,39 @@ def draw_character(image, frame, scale):
     bottom = image.h - frame['y'] - frame['h']
     image.clip_draw(frame['x'], bottom, frame['w'], frame['h'],
                     *frame_geometry(frame, scale))
+
+
+def main():
+    import time
+    import pico2d as p2d
+
+    data = load_atlas()
+    validate_atlas(data)
+    player = AnimationPlayer(data['animations'])
+    scale = calculate_scale(data)
+    p2d.open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    try:
+        image = p2d.load_image(str(BASE_DIR / 'assets' / data['image']))
+        previous = time.perf_counter()
+        running = True
+        while running:
+            for event in p2d.get_events():
+                if event.type == p2d.SDL_QUIT or (
+                    event.type == p2d.SDL_KEYDOWN and event.key == p2d.SDLK_ESCAPE
+                ):
+                    running = False
+            if not running:
+                break
+            now = time.perf_counter()
+            player.update(now - previous)
+            previous = now
+            p2d.clear_canvas()
+            draw_character(image, player.frame, scale)
+            p2d.update_canvas()
+            p2d.delay(0.005)
+    finally:
+        p2d.close_canvas()
+
+
+if __name__ == '__main__':
+    main()
