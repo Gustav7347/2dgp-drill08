@@ -13,3 +13,21 @@ def load_atlas(path=None):
     """실행 위치에 관계없이 소스 파일 기준으로 메타데이터를 읽는다."""
     path = Path(path) if path is not None else BASE_DIR / "assets/atlas.json"
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+class AnimationPlayer:
+    """그래픽 창 없이도 검증할 수 있는 애니메이션 재생 상태."""
+    def __init__(self, animations):
+        self.animations = animations
+        self.animation_index = 0
+        self.frame_index = 0
+        self.elapsed = 0.0
+        self.completed_loops = 0
+
+    @property
+    def animation(self):
+        return self.animations[self.animation_index]
+
+    @property
+    def frame(self):
+        return self.animation['frames'][self.frame_index]
