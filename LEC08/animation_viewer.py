@@ -88,3 +88,9 @@ def frame_geometry(frame, scale):
     x = CANVAS_WIDTH / 2 + (frame['w'] / 2 - frame['pivot_x']) * scale
     y = CANVAS_HEIGHT / 2 + (5 + frame['pivot_y'] - frame['h'] / 2) * scale
     return x, y, frame['w'] * scale, frame['h'] * scale
+
+
+def draw_character(image, frame, scale):
+    bottom = image.h - frame['y'] - frame['h']
+    image.clip_draw(frame['x'], bottom, frame['w'], frame['h'],
+                    *frame_geometry(frame, scale))
