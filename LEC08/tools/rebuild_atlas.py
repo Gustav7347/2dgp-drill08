@@ -10,7 +10,7 @@ SPECS = [
     ('Idle', 'Idle.png', 64, 8, 8),
     ('Run', 'Walking_Right.png', 64, 4, 8),
     ('Melee', 'attack01.png', 80, 5, 10),
-    ('Ranged', 'ranged01.png', 64, 5, 8),
+    ('Ranged', 'ranged01.png', 80, 4, 8),
 ]
 
 

@@ -9,4 +9,4 @@ Retrieved: 2026-09-30.
 Four original PNG strips are included in source/. The project trims transparent
 margins and repacks these pixels into an irregular atlas; no character art was
 redrawn. The actual Idle.png contains 8 cells (512 / 64), despite the page's
-6-frame description. Walking_Right: 4, attack01: 5, ranged01: 5.
+6-frame description. Walking_Right: 4, attack01: 5, ranged01: 4 (80-pixel cells; verified against the actual image).
