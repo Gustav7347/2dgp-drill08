@@ -31,3 +31,11 @@ class AnimationPlayer:
     @property
     def frame(self):
         return self.animation['frames'][self.frame_index]
+
+    def update(self, dt):
+        """프레임률과 무관하게 실제 경과 시간으로 진행한다."""
+        self.elapsed += dt
+        duration = 1.0 / self.animation['fps']
+        while self.elapsed + 1e-10 >= duration:
+            self.elapsed = max(0.0, self.elapsed - duration)
+            self.frame_index = (self.frame_index + 1) % len(self.animation['frames'])
