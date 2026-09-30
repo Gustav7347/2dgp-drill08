@@ -78,7 +78,7 @@ def calculate_scale(data):
     """가장 작은 자세도 화면 높이 절반 이상, 큰 자세도 화면 안에."""
     frames = [f for a in data['animations'] for f in a['frames']]
     minimum = min(f['h'] for f in frames)
-    scale = max(1, int(CANVAS_HEIGHT * 0.62 / minimum + 0.999))
+    scale = max(1, int(CANVAS_HEIGHT * 0.59 / minimum + 0.999))
     return scale
 
 
