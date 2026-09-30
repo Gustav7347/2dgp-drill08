@@ -57,3 +57,18 @@ class AnimationPlayer:
                     self.frame_index = len(self.animation['frames']) - 1
                 else:
                     self.frame_index = 0
+
+
+def validate_atlas(data):
+    """잘못된 atlas를 렌더러에 넘기지 않고 원인을 명확하게 알려준다."""
+    animations = data['animations']
+    if len(animations) < 4:
+        raise ValueError('At least four animations are required')
+    for animation in animations:
+        if animation['fps'] <= 0 or not animation['frames']:
+            raise ValueError('Each animation needs frames and positive fps')
+        for f in animation['frames']:
+            if not (f['w'] > 0 and f['h'] > 0 and f['x'] >= 0 and f['y'] >= 0
+                    and f['x'] + f['w'] <= data['width']
+                    and f['y'] + f['h'] <= data['height']):
+                raise ValueError('Frame rectangle lies outside atlas')
