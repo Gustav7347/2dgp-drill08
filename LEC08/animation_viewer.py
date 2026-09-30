@@ -96,6 +96,26 @@ def draw_character(image, frame, scale):
                     *frame_geometry(frame, scale))
 
 
+def draw_scene(p2d, image, fonts, player, scale):
+    title, text, small = fonts
+    p2d.clear_canvas()
+    p2d.draw_rectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, 16, 23, 34, filled=True)
+    p2d.draw_rectangle(24, 96, CANVAS_WIDTH-24, 500, 24, 35, 49, filled=True)
+    p2d.draw_rectangle(24, 96, CANVAS_WIDTH-24, 97, 65, 94, 115, filled=True)
+    title.draw(26, 568, 'SORA / ANIMATION VIEWER', (224, 237, 246))
+    small.draw(27, 539, 'DRILL 08     4 MOTIONS     AUTO PLAY', (116, 157, 181))
+    draw_character(image, player.frame, scale)
+    name = player.animation['name'].upper()
+    text.draw(28, 73, f'{player.animation_index+1:02d}  /  {name}', (240, 194, 109))
+    if player.paused:
+        status = f'PAUSE  {max(0, PAUSE_SECONDS-player.elapsed):.1f}s   |   5 / 5'
+    else:
+        status = f'PLAYING   |   {player.completed_loops+1} / {REPEAT_COUNT}'
+    text.draw(360, 73, status, (224, 237, 246))
+    small.draw(28, 35, 'IDLE  >  RUN  >  MELEE  >  RANGED  >  REPEAT', (116, 157, 181))
+    small.draw(595, 35, 'ESC: EXIT', (116, 157, 181))
+
+
 def main():
     import time
     import pico2d as p2d
@@ -107,6 +127,8 @@ def main():
     p2d.open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
     try:
         image = p2d.load_image(str(BASE_DIR / 'assets' / data['image']))
+        font_path = Path(p2d.__file__).parent / 'data' / 'ConsolaMalgun.ttf'
+        fonts = tuple(p2d.load_font(str(font_path), size) for size in (26, 20, 14))
         previous = time.perf_counter()
         running = True
         while running:
@@ -120,8 +142,7 @@ def main():
             now = time.perf_counter()
             player.update(now - previous)
             previous = now
-            p2d.clear_canvas()
-            draw_character(image, player.frame, scale)
+            draw_scene(p2d, image, fonts, player, scale)
             p2d.update_canvas()
             p2d.delay(0.005)
     finally:
